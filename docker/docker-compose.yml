@@ -1,0 +1,8 @@
+version: '2'
+
+services:
+    zookeeper:
+        build: zookeeper
+        image: ctrl-c/cc-kafka
+        ports:
+            - "2181:2181"
