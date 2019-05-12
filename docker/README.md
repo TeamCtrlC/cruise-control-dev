@@ -9,7 +9,7 @@ docker-compose build
 ## Run
 
 ```bash
-docker-compose up -d
+docker-compose up [-d]
 ```
 
 ## Destroy
@@ -17,3 +17,7 @@ docker-compose up -d
 ```bash
 docker-compose down
 ```
+
+## Check status
+
+Go to `http://localhost:8090/kafkacruisecontrol/state`

@@ -7,10 +7,77 @@ services:
         image: 'ctrl-c/cc-zookeeper'
         ports:
           - '2181:2181'
-    kafka:
+    kafka-0:
         build: 'kafka'
+        hostname: 'kafka-0'
         image: 'ctrl-c/cc-kafka'
         ports:
           - '9092'
         depends_on:
           - 'zookeeper'
+        environment:
+          - BROKER_ID=0
+    kafka-1:
+        build: 'kafka'
+        hostname: 'kafka-1'
+        image: 'ctrl-c/cc-kafka'
+        ports:
+          - '9092'
+        depends_on:
+          - 'zookeeper'
+        environment:
+          - BROKER_ID=1
+    kafka-2:
+        build: 'kafka'
+        hostname: 'kafka-2'
+        image: 'ctrl-c/cc-kafka'
+        ports:
+          - '9092'
+        depends_on:
+          - 'zookeeper'
+        environment:
+          - BROKER_ID=2
+    kafka-3:
+        build: 'kafka'
+        hostname: 'kafka-3'
+        image: 'ctrl-c/cc-kafka'
+        ports:
+          - '9092'
+        depends_on:
+          - 'zookeeper'
+        environment:
+          - BROKER_ID=3
+    kafka-4:
+        build: 'kafka'
+        hostname: 'kafka-4'
+        image: 'ctrl-c/cc-kafka'
+        ports:
+          - '9092'
+        depends_on:
+          - 'zookeeper'
+        environment:
+          - BROKER_ID=4
+    topic-init:
+        build: 'topic-init'
+        image: 'ctrl-c/cc-topic-init'
+        depends_on:
+          - 'zookeeper'
+          - 'kafka-0'
+          - 'kafka-1'
+          - 'kafka-2'
+          - 'kafka-3'
+          - 'kafka-4'
+    cruise-control:
+        build: 'cruise-control'
+        hostname: 'cruise-control'
+        image: 'ctrl-c/cruise-control'
+        ports:
+          - '8090:8090'
+        depends_on:
+          - 'zookeeper'
+          - 'kafka-0'
+          - 'kafka-1'
+          - 'kafka-2'
+          - 'kafka-3'
+          - 'kafka-4'
+          - 'topic-init'
