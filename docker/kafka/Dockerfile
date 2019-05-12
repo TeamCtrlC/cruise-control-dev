@@ -1,6 +1,7 @@
 FROM gradle:4.8-jdk8-slim
 USER root
 COPY entrypoint.sh /
+RUN chmod +x /entrypoint.sh
 COPY configs/server.properties /
 ARG KAFKA_VERSION=0.11.0.0
 ARG CC_VERSION=2.0.37
