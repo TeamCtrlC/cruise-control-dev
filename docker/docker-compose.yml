@@ -1,8 +1,16 @@
-version: '2'
+version: '3.4'
 
 services:
     zookeeper:
-        build: zookeeper
-        image: ctrl-c/cc-kafka
+        build: 'zookeeper'
+        hostname: 'zookeeper'
+        image: 'ctrl-c/cc-zookeeper'
         ports:
-            - "2181:2181"
+          - '2181:2181'
+    kafka:
+        build: 'kafka'
+        image: 'ctrl-c/cc-kafka'
+        ports:
+          - '9092'
+        depends_on:
+          - 'zookeeper'
