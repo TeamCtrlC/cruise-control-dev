@@ -1,6 +1,12 @@
 # Usage
 
 ## Build
+Please build the base image by running
+```bash
+sh build-base.sh
+```
+
+Build the remaining service images
 ```bash
 docker-compose build
 ```
