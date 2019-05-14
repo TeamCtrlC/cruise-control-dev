@@ -57,16 +57,6 @@ services:
           - 'zookeeper'
         environment:
           - BROKER_ID=4
-    topic-init:
-        build: 'topic-init'
-        image: 'ctrl-c/cc-topic-init'
-        depends_on:
-          - 'zookeeper'
-          - 'kafka-0'
-          - 'kafka-1'
-          - 'kafka-2'
-          - 'kafka-3'
-          - 'kafka-4'
     cruise-control:
         build: 'cruise-control'
         hostname: 'cruise-control'
@@ -80,4 +70,3 @@ services:
           - 'kafka-2'
           - 'kafka-3'
           - 'kafka-4'
-          - 'topic-init'
