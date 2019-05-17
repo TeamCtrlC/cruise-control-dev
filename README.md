@@ -20,4 +20,4 @@
 ```
 
 ### Check status
-Click [here](http://localhost:8090/kafkacruisecontrol/state) (http://localhost:8090/kafkacruisecontrol/state)
+http://localhost:8090/kafkacruisecontrol/state
