@@ -1,5 +1,14 @@
 #!/bin/bash
 
+KAFKA_HOSTS='kafka-0:9092,kafka-1:9092,kafka-2:9092,kafka-3:9092,kafka-4:9092'
+ZK_ENSEMBLE='zookeeper:2181'
+
+
+sed -i "/broker.id=/ s/=.*/=$BROKER_ID/" /server.properties
+
+sed -i "/bootstrap.servers=/ s/=.*/=$KAFKA_HOSTS/" /cruisecontrol.properties
+sed -i "/zookeeper.connect=/ s/=.*/=$ZK_ENSEMBLE/" /cruisecontrol.properties
+
 pushd /home/$SERVICE_USER/kafka-current/bin
 
 # Initialize Cruise Control metric topic
