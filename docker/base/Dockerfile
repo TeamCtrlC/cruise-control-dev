@@ -7,6 +7,7 @@ ARG SOURCE_CC_PATH=tmp
 ARG TARGET_CC_PATH=/home/${SERVICE_USER}/cruise-control
 ENV SERVICE_USER ${SERVICE_USER}
 RUN apt-get update && apt-get install -y --no-install-recommends git ca-certificates
+RUN apt-get install -y rsync
 RUN wget ${KAFKA_BIN}
 RUN tar -zxvf kafka_2.11-${KAFKA_VERSION}.tgz
 RUN mv -v /home/${SERVICE_USER}/kafka_2.11-${KAFKA_VERSION} \
@@ -15,6 +16,6 @@ COPY ${SOURCE_CC_PATH} ${TARGET_CC_PATH}
 RUN cd /home/${SERVICE_USER}; rm -rf kafka_2.11-${KAFKA_VERSION}.tgz
 RUN cd /home/${SERVICE_USER}; rm -rf *.tar.gz
 RUN cd ${TARGET_CC_PATH}; ./gradlew jar
+RUN cd ${TARGET_CC_PATH}; gradle jar copyDependantLibs
 RUN cp ${TARGET_CC_PATH}/cruise-control-metrics-reporter/build/libs/cruise-control-metrics-reporter-*.jar \
     /home/${SERVICE_USER}/kafka-current/libs
-RUN cd ${TARGET_CC_PATH}; ./gradlew build -x test
