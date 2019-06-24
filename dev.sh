@@ -2,7 +2,8 @@
 
 OP=$1
 SRC_PATH=$2
-CC_TEMP_PATH=$(pwd)/docker/base/tmp
+CC_TEMP_PATH_BASE=$(pwd)/docker/base/tmp
+CC_TEMP_PATH_CC=$(pwd)/docker/cruise-control/tmp
 
 function help() {
     echo "Usage: ./dev.sh <options> [source-path]"
@@ -17,9 +18,11 @@ if [[ $OP = "build" ]]; then
     pushd docker
         # Build base image
         if [[ -d "$SRC_PATH" ]]; then
-            cp -vr $SRC_PATH $CC_TEMP_PATH
+            cp -vpr $SRC_PATH $CC_TEMP_PATH_BASE
+            cp -vpr $SRC_PATH $CC_TEMP_PATH_CC
             docker build -t ctrl-c:cc-base base && docker-compose build
-            rm -rf $CC_TEMP_PATH
+            rm -rf $CC_TEMP_PATH_BASE
+            rm -rf $CC_TEMP_PATH_CC
         else
             echo "ERROR: Please specify a valid build path."
             echo ""
@@ -28,7 +31,21 @@ if [[ $OP = "build" ]]; then
     popd
 elif [[ $OP = "up" ]]; then
     pushd docker
-        docker-compose up $2
+        docker-compose up -d
+    popd
+elif [[ $OP = "refresh" ]]; then
+    pushd docker
+        if [[ -d "$SRC_PATH" ]]; then
+            docker-compose rm -sf cruise-control
+            cp -vpr $SRC_PATH $CC_TEMP_PATH_CC
+            docker-compose build cruise-control
+            docker-compose up -d
+            rm -rf $CC_TEMP_PATH_CC
+        else
+            echo "ERROR: Please specify a valid build path."
+            echo ""
+            help
+        fi
     popd
 elif [[ $OP = "down" ]]; then
     pushd docker

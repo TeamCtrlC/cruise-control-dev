@@ -9,9 +9,14 @@
 ```
 
 ### Run
-- Option `-d` allows the containers to run under detachment mode
 ```bash
-./dev.sh build up [-d]
+./dev.sh build up
+```
+
+### Refresh
+- Refresh Cruise-Control host for code changes
+```
+./dev.sh refresh <PATH_TO_SOURCE>
 ```
 
 ### Destroy
