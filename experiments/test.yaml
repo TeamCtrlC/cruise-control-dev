@@ -1,0 +1,126 @@
+openapi: "3.0.0"
+info:
+  title: Cruise Control API
+  version: 1.0.0
+components:
+  schemas:
+    PartitionLoad:
+      type: object
+      properties:
+        leader:
+          type: integer
+        disk:
+          type: number
+        partition:
+          type: integer
+        followers:
+          type: array
+          items:
+            type: integer
+        msg_in:
+          type: number
+        topic:
+          type: string
+        cpu:
+          type: number
+        networkOutbound:
+          type: number
+        networkInbound:
+          type: number
+paths:
+  /partition_load:
+    get:
+      operationId: getPartitionLoad
+      summary: Get the partition load sorted by the utilization of a given resource and filtered by given topic regular expression and partition number/range
+      parameters:
+        - in: query
+          name: resource
+          required: true
+          description: the partition resource to collect
+          schema: 
+            type: string
+            enum: [CPU, NW_IN, NW_OUT, DISK]
+        - in: query
+          name: start
+          required: false
+          description: the start time for how long to measure metrics from
+          schema: 
+            type: integer
+            minimum: 0
+        - in: query
+          name: end
+          description: the end time for how long to measure metrics from
+          required: false
+          schema: 
+            type: integer
+            minimum: 0
+        - in: query
+          name: entries
+          description: The number of entries to show in the response
+          required: false
+          schema: 
+            type: integer
+            minimum: 0
+        - in: query
+          name: partitions
+          description: The partition or [start]-[end] partitions to return
+          required: false
+          schema: 
+            oneOf:
+              - type: integer
+                minimum: 0
+              - type: string
+                pattern: '^[0-9][0-9]*-[0-9][0-9]*$'
+        - in: query
+          name: topic
+          description: A regular expression matching the desired topics
+          required: false
+          schema: 
+            type: string
+        - in: query
+          name: min_valid_partition_ratio
+          description: The minimum required ratio of monitored topics [0-1]
+          required: false
+          schema: 
+            type: number
+            minimum: 0
+            maximum: 1
+        - in: query
+          name: allow_capacity_estimation
+          description: Whether to allow capacity estimation when cruise-control is unable to obtain all per-broker capacity information
+          required: false
+          schema: 
+            type: boolean
+        - in: query
+          name: max_load
+          description: whether to return the resource metrics maximum
+          required: false
+          schema: 
+            type: boolean
+        - in: query
+          name: avg_load
+          description: whether to return the resource metrics as an average over time
+          required: false
+          schema: 
+            type: boolean
+        - in: query
+          name: json
+          description: a boolean denoting to return the response as a json
+          required: false
+          schema: 
+            type: boolean
+            
+            
+      responses:
+        '200':
+          description: |-
+            200 response
+          content:
+            application/json:
+              schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/PartitionLoad'
+
+
+
